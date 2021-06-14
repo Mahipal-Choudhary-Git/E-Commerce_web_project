@@ -1,3 +1,4 @@
+import { activateLoader, deactivateLoader } from ".";
 import backend from "../apis/backend";
 import {
     ADD_ITEM_TO_CART,
@@ -6,7 +7,8 @@ import {
     REMOVE_ITEM_FROM_CART,
 } from "./types";
 
-export const addItemToCart = (id, qty) => async (dispatch, getState) => {
+export const addItemToCart = (id, qty) => async (dispatch) => {
+    dispatch(activateLoader());
     try {
         const { data } = await backend.get(`/product/${id}`);
         dispatch({
@@ -20,10 +22,7 @@ export const addItemToCart = (id, qty) => async (dispatch, getState) => {
                 productStock: data.countInStock,
             },
         });
-        localStorage.setItem(
-            "cartItems",
-            JSON.stringify(getState().cart.cartItems)
-        );
+        dispatch(deactivateLoader());
     } catch (err) {
         dispatch({
             type: FETCH_PRODUCT_FAILED,
@@ -32,24 +31,20 @@ export const addItemToCart = (id, qty) => async (dispatch, getState) => {
                     ? err.response.data.message
                     : err.message,
         });
+        dispatch(deactivateLoader());
     }
 };
 
-export const removeItemFromCart = (productId) => (dispatch, getState) => {
+export const removeItemFromCart = (productId) => (dispatch) => {
     dispatch({
         type: REMOVE_ITEM_FROM_CART,
         payload: productId,
     });
-    localStorage.setItem(
-        "cartItems",
-        JSON.stringify(getState().cart.cartItems)
-    );
 };
 
-export const addShippingAddress = (data) => (dispatch, getState) => {
+export const addShippingAddress = (data) => (dispatch) => {
     dispatch({
         type: ADD_SHIPPING_ADDRESS,
         payload: data,
     });
-    localStorage.setItem("shippingAddress", JSON.stringify(data));
 };

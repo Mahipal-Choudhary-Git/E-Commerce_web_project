@@ -4,11 +4,11 @@ const orderModel = new mongoose.Schema(
     {
         orderItems: [
             {
-                name: { type: String, required: true },
+                productName: { type: String, required: true },
                 qty: { type: Number, required: true },
-                image: { type: String, required: true },
-                price: { type: Number, required: true },
-                product: {
+                productImage: { type: String, required: true },
+                productPrice: { type: Number, required: true },
+                productId: {
                     type: mongoose.Schema.Types.ObjectId,
                     ref: "Product",
                     required: true,
@@ -20,7 +20,7 @@ const orderModel = new mongoose.Schema(
             address: { type: String, required: true },
             city: { type: String, required: true },
             postalCode: { type: String, required: true },
-            country: { type: String, required: true },
+            state: { type: String, required: true },
         },
         paymentMethod: { type: String, required: true },
         itemsPrice: { type: Number, required: true },

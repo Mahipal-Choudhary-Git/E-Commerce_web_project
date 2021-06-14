@@ -12,7 +12,9 @@ import {
     Message,
     Segment,
 } from "semantic-ui-react";
+import { removeErrorMessage } from "../../actions";
 import { addItemToCart, removeItemFromCart } from "../../actions/cartActions";
+import { renderError, renderLoader } from "../basicRenderer";
 
 const ViewCart = ({ location, match }) => {
     const productId = match.params.id;
@@ -23,51 +25,64 @@ const ViewCart = ({ location, match }) => {
     }, [dispatch, productId, quantity]);
     const cart = useSelector((state) => state.cart);
 
+    const error = useSelector((state) => state.error);
+    const loader = useSelector((state) => state.loader);
+
+    useEffect(() => {
+        return () => {
+            dispatch(removeErrorMessage());
+        };
+    }, [dispatch]);
+
     return (
-        <Segment>
-            {cart.cartItems.length === 0 ? (
-                <Message>
-                    Cart is empty. <Link to="/"> Go shopping</Link>
-                </Message>
-            ) : (
-                <Grid stackable>
-                    <GridColumn width={11}>
-                        <Header>Shopping cart</Header>{" "}
-                        <Item.Group divided>
-                            {renderCartItems(cart.cartItems, dispatch)}
-                        </Item.Group>
-                    </GridColumn>
-                    <GridColumn width={4}>
-                        <Card fluid>
-                            <Card.Content>
-                                <Card.Header>
-                                    Subtotal{" "}
-                                    {` (${cart.cartItems.reduce(
-                                        (acc, e) => acc + e.qty,
-                                        0
-                                    )} items) :  $ ${cart.cartItems.reduce(
-                                        (acc, e) =>
-                                            acc + e.productPrice * e.qty,
-                                        0
-                                    )}`}
-                                </Card.Header>
-                            </Card.Content>
-                            <Card.Content extra>
-                                <Link to="/login?redirect=shipping">
-                                    <Button
-                                        color="yellow"
-                                        fluid
-                                        style={{ color: "black" }}
-                                    >
-                                        Proceed to Checkout
-                                    </Button>
-                                </Link>
-                            </Card.Content>
-                        </Card>
-                    </GridColumn>
-                </Grid>
-            )}
-        </Segment>
+        <>
+            {loader && renderLoader()}
+            <Segment>
+                {error && renderError(error)}
+                {cart.cartItems.length === 0 ? (
+                    <Message>
+                        Cart is empty. <Link to="/"> Go shopping</Link>
+                    </Message>
+                ) : (
+                    <Grid stackable>
+                        <GridColumn width={11}>
+                            <Header>Shopping cart</Header>{" "}
+                            <Item.Group divided>
+                                {renderCartItems(cart.cartItems, dispatch)}
+                            </Item.Group>
+                        </GridColumn>
+                        <GridColumn width={4}>
+                            <Card fluid>
+                                <Card.Content>
+                                    <Card.Header>
+                                        Subtotal{" "}
+                                        {` (${cart.cartItems.reduce(
+                                            (acc, e) => acc + e.qty,
+                                            0
+                                        )} items) :  $ ${cart.cartItems.reduce(
+                                            (acc, e) =>
+                                                acc + e.productPrice * e.qty,
+                                            0
+                                        )}`}
+                                    </Card.Header>
+                                </Card.Content>
+                                <Card.Content extra>
+                                    <Link to="/login?redirect=shipping">
+                                        <Button
+                                            color="yellow"
+                                            fluid
+                                            style={{ color: "black" }}
+                                        >
+                                            Proceed to Checkout
+                                        </Button>
+                                    </Link>
+                                </Card.Content>
+                            </Card>
+                        </GridColumn>
+                    </Grid>
+                )}
+            </Segment>
+        </>
     );
 };
 

@@ -5,6 +5,7 @@ import {
     LOGIN_USER_SUCCESS,
     LOGOUT_USER,
     REMOVE_ALL_FROM_CART,
+    RESET_ORDERS,
 } from "./types";
 
 export const LoginUser = (email, password) => async (dispatch) => {
@@ -13,7 +14,6 @@ export const LoginUser = (email, password) => async (dispatch) => {
         const { data } = await auth.post("/user/login", { email, password });
         dispatch({ type: LOGIN_USER_SUCCESS, payload: data });
         dispatch(deactivateLoader());
-        localStorage.setItem("userInfo", JSON.stringify(data));
     } catch (err) {
         dispatch({
             type: LOGIN_USER_FAILED,
@@ -27,9 +27,7 @@ export const LoginUser = (email, password) => async (dispatch) => {
 };
 
 export const logoutUser = () => async (dispatch) => {
-    localStorage.removeItem("userInfo");
-    localStorage.removeItem("cartItems");
-    localStorage.removeItem("shippingAddress");
     dispatch({ type: LOGOUT_USER });
     dispatch({ type: REMOVE_ALL_FROM_CART });
+    dispatch({ type: RESET_ORDERS });
 };

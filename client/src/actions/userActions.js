@@ -14,10 +14,8 @@ export const addUser = (name, email, password) => async (dispatch) => {
             email,
             password,
         });
-        // dispatch({ type: ADD_USER_SUCCESS, payload: data });
         dispatch({ type: LOGIN_USER_SUCCESS, payload: data });
         dispatch(deactivateLoader());
-        localStorage.setItem("userInfo", JSON.stringify(data));
     } catch (error) {
         dispatch({
             type: ADD_USER_FAILED,
