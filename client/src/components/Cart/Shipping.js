@@ -55,7 +55,7 @@ const Shipping = () => {
         dispatch(
             addShippingAddress({ fullName, address, city, state, postalCode })
         );
-        history.push("/billing");
+        history.push("/confirmOrder");
     };
     return (
         <Segment basic>
@@ -72,15 +72,15 @@ const Shipping = () => {
                     </Step.Content>
                 </Step>
                 <Step disabled>
-                    <Icon name="credit card" />
-                    <Step.Content>
-                        <Step.Title>Billing</Step.Title>
-                    </Step.Content>
-                </Step>
-                <Step disabled>
                     <Icon name="info" />
                     <Step.Content>
                         <Step.Title>Confirm Order</Step.Title>
+                    </Step.Content>
+                </Step>
+                <Step disabled>
+                    <Icon name="credit card" />
+                    <Step.Content>
+                        <Step.Title>Billing</Step.Title>
                     </Step.Content>
                 </Step>
             </Step.Group>
@@ -121,7 +121,7 @@ const Shipping = () => {
                             <Form.Field>
                                 <Input
                                     required
-                                    icon="fort awesome"
+                                    icon="map marker alternate"
                                     iconPosition="left"
                                     placeholder="City"
                                     value={city}

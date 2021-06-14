@@ -8,6 +8,7 @@ import ProductDetails from "./Product/ProductDetail";
 import ViewCart from "./Cart/ViewCart";
 import Shipping from "./Cart/Shipping";
 import Billing from "./Cart/Billing";
+import ConfirmOrder from "./Cart/ConfirmOrder";
 
 const App = () => {
     return (
@@ -18,6 +19,11 @@ const App = () => {
                         path="/product/:id"
                         exact
                         component={ProductDetails}
+                    />
+                    <Route
+                        path="/confirmOrder"
+                        exact
+                        component={ConfirmOrder}
                     />
                     <Route path="/billing" exact component={Billing} />
                     <Route path="/shipping" exact component={Shipping} />

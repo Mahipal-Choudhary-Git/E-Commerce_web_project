@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import userRouter from "./routers/userRouter.js";
 import productRouter from "./routers/productRouter.js";
 import authRouter from "./routers/authRouter.js";
+import orderRouter from "./routers/orderRouter.js";
 
 // create express instance
 const app = express();
@@ -22,6 +23,7 @@ mongoose.connect(process.env.MONGODB_URL || "mongodb://localhost/amazona", {
 });
 
 //api routes
+app.use("/api", orderRouter);
 app.use("/api", productRouter);
 app.use("/api", userRouter);
 
