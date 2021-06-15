@@ -1,7 +1,7 @@
 import {
     ADD_ORDER_FAILED,
     ADD_USER_FAILED,
-    EDIT_ORDER_FAILED,
+    UPDATE_ORDER_FAILED,
     FETCH_ORDERS_FAILED,
     FETCH_ORDER_FAILED,
     FETCH_PRODUCTS_FAILED,
@@ -29,7 +29,7 @@ const errorReducer = (state = null, action) => {
             return action.payload;
         case ADD_ORDER_FAILED:
             return action.payload;
-        case EDIT_ORDER_FAILED:
+        case UPDATE_ORDER_FAILED:
             return action.payload;
         case REMOVE_ERROR:
             return null;

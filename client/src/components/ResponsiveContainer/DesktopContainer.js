@@ -12,7 +12,7 @@ import {
 } from "semantic-ui-react";
 import { Media } from "./ResponsiveContainer";
 import Footer from "./Footer";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../actions/userAuthActions";
 
@@ -21,6 +21,7 @@ const DesktopContainer = ({ children }) => {
     const cartItemCount = useSelector((state) => state.cart.cartItems.length);
     const { userInfo } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
+    const history = useHistory();
 
     const hideFixedMenu = () => setFixed(false);
     const showFixedMenu = () => setFixed(true);
@@ -95,6 +96,12 @@ const DesktopContainer = ({ children }) => {
                                             }}
                                         >
                                             <Dropdown.Menu>
+                                                <Dropdown.Item
+                                                    text="Orders..."
+                                                    onClick={() =>
+                                                        history.push("/orders")
+                                                    }
+                                                />
                                                 <Dropdown.Item
                                                     icon="sign-out"
                                                     text="Sign Out"

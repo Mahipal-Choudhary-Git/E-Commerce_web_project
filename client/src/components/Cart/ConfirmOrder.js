@@ -23,7 +23,7 @@ const ConfirmOrder = () => {
     const history = useHistory();
     const cartItems = useSelector((state) => state.cart.cartItems);
     const userInfo = useSelector((state) => state.auth.userInfo);
-    const createdOrderId = useSelector((state) => state.orders.success);
+    const createdOrderId = useSelector((state) => state.cart.newOrderCreated);
     const shippingAddress = useSelector((state) => state.cart.shippingAddress);
     const error = useSelector((state) => state.error);
     const loader = useSelector((state) => state.loader);
@@ -60,7 +60,7 @@ const ConfirmOrder = () => {
 
     useEffect(() => {
         if (createdOrderId) {
-            history.push(`/billing/?orderId=${createdOrderId}`);
+            history.push(`/billing/${createdOrderId}`);
         }
     }, [dispatch, createdOrderId, history]);
 

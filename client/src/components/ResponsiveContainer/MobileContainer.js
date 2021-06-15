@@ -12,7 +12,7 @@ import {
 } from "semantic-ui-react";
 import { Media } from "./ResponsiveContainer";
 import Footer from "./Footer";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../actions/userAuthActions";
 
@@ -21,6 +21,7 @@ const MobileContainer = ({ children }) => {
     const cartItemCount = useSelector((state) => state.cart.cartItems.length);
     const { userInfo } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
+    const history = useHistory();
 
     const handleSidebarHide = () => setSidebarOpened(false);
     const handleToggle = () => setSidebarOpened(true);
@@ -108,6 +109,12 @@ const MobileContainer = ({ children }) => {
                                         >
                                             <Dropdown.Menu>
                                                 <Dropdown.Item
+                                                    text="Orders..."
+                                                    onClick={() =>
+                                                        history.push("/orders")
+                                                    }
+                                                />
+                                                <Dropdown.Item
                                                     icon="sign-out"
                                                     text="Sign Out"
                                                     onClick={(e) =>
@@ -119,7 +126,7 @@ const MobileContainer = ({ children }) => {
                                             </Dropdown.Menu>
                                         </Dropdown>
                                     ) : (
-                                        <Link to="/signin">
+                                        <Link to="/login">
                                             <Button
                                                 inverted
                                                 style={{
