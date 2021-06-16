@@ -11,6 +11,7 @@ import Billing from "./Cart/Billing";
 import ConfirmOrder from "./Cart/ConfirmOrder";
 import OrderDetails from "./Order/OrderDetail";
 import OrderList from "./Order/OrdersList";
+import ProfileEdit from "./ProfileEdit";
 
 const App = () => {
     return (
@@ -29,6 +30,7 @@ const App = () => {
                         exact
                         component={ConfirmOrder}
                     />
+                    <Route path="/profile" exact component={ProfileEdit} />
                     <Route path="/billing/:id" exact component={Billing} />
                     <Route path="/shipping" exact component={Shipping} />
                     <Route path="/cart/:id?" exact component={ViewCart} />

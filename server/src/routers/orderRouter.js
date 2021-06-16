@@ -71,7 +71,7 @@ orderRouter.patch(
                 order.paidAt = Date.now();
                 order.paymentResult = req.body.paymentResult;
             }
-            const updatedOrder = await orderModel.save();
+            const updatedOrder = await order.save();
             res.send({ message: "Order Updated", order: updatedOrder });
         } else {
             res.status(404).send({ message: "Order Not Found" });

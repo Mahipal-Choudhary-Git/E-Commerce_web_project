@@ -108,7 +108,7 @@ const LoginForm = ({ location }) => {
                                 color="teal"
                                 fluid
                                 size="large"
-                                onClick={handleOnSubmit}
+                                // onClick={handleOnSubmit}
                             >
                                 Login
                             </Button>

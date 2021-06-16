@@ -109,6 +109,14 @@ const MobileContainer = ({ children }) => {
                                         >
                                             <Dropdown.Menu>
                                                 <Dropdown.Item
+                                                    icon="pencil"
+                                                    text="edit Profile"
+                                                    onClick={() =>
+                                                        history.push("/profile")
+                                                    }
+                                                />
+                                                <Dropdown.Item
+                                                    icon="gift"
                                                     text="Orders..."
                                                     onClick={() =>
                                                         history.push("/orders")
