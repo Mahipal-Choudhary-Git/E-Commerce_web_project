@@ -1,15 +1,24 @@
 import {
     ADD_ITEM_TO_CART,
+    ADD_ORDER_RESET,
+    ADD_ORDER_SUCCESS,
     ADD_SHIPPING_ADDRESS,
+    PAYMENT_SUCCESS,
+    PAYMENT_SUCCESS_RESET,
     REMOVE_ALL_FROM_CART,
     REMOVE_ALL_ITEMS_FROM_CART,
     REMOVE_ITEM_FROM_CART,
 } from "../actions/types";
 
-const cartItems = [];
-const shippingAddress = {};
-
-const cartReducer = (state = { cartItems, shippingAddress }, action) => {
+const cartReducer = (
+    state = {
+        cartItems: [],
+        shippingAddress: {},
+        newOrderCreated: false,
+        newPaymentSuccess: false,
+    },
+    action
+) => {
     switch (action.type) {
         case ADD_ITEM_TO_CART:
             const itemToAdd = action.payload;
@@ -38,6 +47,14 @@ const cartReducer = (state = { cartItems, shippingAddress }, action) => {
             return { ...state, shippingAddress: action.payload };
         case REMOVE_ALL_ITEMS_FROM_CART:
             return { ...state, cartItems: [] };
+        case ADD_ORDER_SUCCESS:
+            return { ...state, newOrderCreated: action.payload._id };
+        case ADD_ORDER_RESET:
+            return { ...state, newOrderCreated: false };
+        case PAYMENT_SUCCESS:
+            return { ...state, newPaymentSuccess: action.payload._id };
+        case PAYMENT_SUCCESS_RESET:
+            return { ...state, newPaymentSuccess: false };
         default:
             return state;
     }

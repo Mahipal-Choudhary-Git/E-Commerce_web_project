@@ -1,9 +1,25 @@
 import { Router } from "express";
 import expressAsyncHandler from "express-async-handler";
 import orderModel from "../models/orderModel.js";
+import userModel from "../models/userModel.js";
 import { isAuth } from "../utils.js";
 
 const orderRouter = Router();
+
+orderRouter.get(
+    "/order",
+    isAuth,
+    expressAsyncHandler(async (req, res) => {
+        const user = await userModel.findById(req.user._id);
+        if (user.isAdmin) {
+            const orders = await orderModel.find();
+            res.send(orders);
+        } else {
+            const orders = await orderModel.find({ user: req.user._id });
+            res.send(orders);
+        }
+    })
+);
 
 orderRouter.post(
     "/order",
@@ -38,6 +54,25 @@ orderRouter.get(
         const order = await orderModel.findById(req.params.id);
         if (order) {
             res.send(order);
+        } else {
+            res.status(404).send({ message: "Order Not Found" });
+        }
+    })
+);
+
+orderRouter.patch(
+    "/order/:id",
+    isAuth,
+    expressAsyncHandler(async (req, res) => {
+        const order = await orderModel.findById(req.params.id);
+        if (order) {
+            if (req.body.paymentResult) {
+                order.isPaid = true;
+                order.paidAt = Date.now();
+                order.paymentResult = req.body.paymentResult;
+            }
+            const updatedOrder = await order.save();
+            res.send({ message: "Order Updated", order: updatedOrder });
         } else {
             res.status(404).send({ message: "Order Not Found" });
         }

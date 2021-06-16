@@ -118,7 +118,7 @@ const SignupForm = ({ location }) => {
                                 color="teal"
                                 fluid
                                 size="large"
-                                onClick={handleOnSubmit}
+                                // onClick={handleOnSubmit}
                             >
                                 Register
                             </Button>

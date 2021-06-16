@@ -6,6 +6,7 @@ import userRouter from "./routers/userRouter.js";
 import productRouter from "./routers/productRouter.js";
 import authRouter from "./routers/authRouter.js";
 import orderRouter from "./routers/orderRouter.js";
+import { PAYPAL_CLIENT_ID } from "./secrets.js";
 
 // create express instance
 const app = express();
@@ -29,6 +30,11 @@ app.use("/api", userRouter);
 
 //authetication routes
 app.use("/auth", authRouter);
+
+//paypal client id
+app.get("/api/config/paypal", (req, res) => {
+    res.send(PAYPAL_CLIENT_ID);
+});
 
 app.get("/", (req, res) => {
     res.send("server is ready");

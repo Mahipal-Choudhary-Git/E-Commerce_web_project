@@ -1,108 +1,43 @@
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useHistory } from "react-router-dom";
 import {
     Segment,
-    Step,
-    Icon,
     Grid,
-    GridColumn,
     Card,
-    Button,
-    List,
     Header,
     Item,
+    List,
+    GridColumn,
+    Message,
 } from "semantic-ui-react";
-import { removeErrorMessage } from "../../actions";
-import { createOrder } from "../../actions/orderActions";
-import { ADD_ORDER_RESET } from "../../actions/types";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory, useParams, Link } from "react-router-dom";
+
+import { fetchOrder } from "../../actions/orderActions";
 import { renderError, renderLoader } from "../basicRenderer";
 
-const ConfirmOrder = () => {
-    const dispatch = useDispatch();
-    const history = useHistory();
-    const cartItems = useSelector((state) => state.cart.cartItems);
+const OrderDetails = () => {
     const userInfo = useSelector((state) => state.auth.userInfo);
-    const createdOrderId = useSelector((state) => state.cart.newOrderCreated);
-    const shippingAddress = useSelector((state) => state.cart.shippingAddress);
+    const history = useHistory();
+    const dispatch = useDispatch();
+    const orderId = useParams().id;
+
+    if (!userInfo) {
+        history.push("/login?redirect=orders");
+    }
+    useEffect(() => {
+        dispatch(fetchOrder(orderId));
+    }, [dispatch, orderId]);
+
+    const order = useSelector((state) => state.orders[orderId]);
+    const { shippingAddress } = order;
     const error = useSelector((state) => state.error);
     const loader = useSelector((state) => state.loader);
-
-    if (!userInfo && !shippingAddress.address) {
-        history.push("/shipping");
-    }
-    if (cartItems.length < 1 && !createdOrderId) {
-        history.push("/cart");
-    }
-    const tax = 0.15;
-    const shippingCharge = 10;
-    const cartItemsPrice = cartItems.reduce(
-        (acc, e) => acc + e.productPrice * e.qty,
-        0
-    );
-    const taxPrice = tax * cartItemsPrice;
-    const totalPrice = cartItemsPrice + shippingCharge + taxPrice;
-
-    const onPlaceOrderHandler = () => {
-        dispatch(
-            createOrder({
-                orderItems: cartItems,
-                shippingAddress,
-                paymentMethod: "PayPal",
-                itemsPrice: cartItemsPrice,
-                shippingPrice: shippingCharge,
-                taxPrice,
-                totalPrice,
-                userInfo,
-            })
-        );
-    };
-
-    useEffect(() => {
-        if (createdOrderId) {
-            history.push(`/billing/${createdOrderId}`);
-        }
-    }, [dispatch, createdOrderId, history]);
-
-    useEffect(() => {
-        return () => {
-            dispatch(removeErrorMessage());
-            dispatch({ type: ADD_ORDER_RESET });
-        };
-    }, [dispatch]);
-
     return (
         <>
             {loader && renderLoader()}
-
             <Segment basic>
                 {error && renderError(error)}
-                <Step.Group
-                    attached="top"
-                    unstackable
-                    size="mini"
-                    style={{ marginBottom: "5vh" }}
-                >
-                    <Step completed>
-                        <Icon name="truck" />
-                        <Step.Content>
-                            <Step.Title>Shipping</Step.Title>
-                        </Step.Content>
-                    </Step>
-
-                    <Step active>
-                        <Icon name="info" />
-                        <Step.Content>
-                            <Step.Title>Confirm Order</Step.Title>
-                        </Step.Content>
-                    </Step>
-                    <Step disabled>
-                        <Icon name="credit card" />
-                        <Step.Content>
-                            <Step.Title>Billing</Step.Title>
-                        </Step.Content>
-                    </Step>
-                </Step.Group>
+                <Header as="h2">Order Detail</Header>
                 <Grid stackable>
                     <GridColumn width={11}>
                         <Card fluid>
@@ -116,6 +51,17 @@ const ConfirmOrder = () => {
                                     {`${shippingAddress.address} , ${shippingAddress.city} , ${shippingAddress.postalCode} , ${shippingAddress.state}`}
                                 </Card.Description>
                             </Card.Content>
+                            <Card.Content extra>
+                                {order.isDelivered ? (
+                                    <Message success color="green">
+                                        Delivered at {order.deliveredAt}
+                                    </Message>
+                                ) : (
+                                    <Message error color="red">
+                                        Not Delivered
+                                    </Message>
+                                )}
+                            </Card.Content>
                         </Card>
                         <Card fluid>
                             <Card.Content>
@@ -124,11 +70,22 @@ const ConfirmOrder = () => {
                                     <b>Method : </b> PayPal
                                 </Card.Description>
                             </Card.Content>
+                            <Card.Content extra>
+                                {order.isPaid ? (
+                                    <Message success color="green">
+                                        Paid at {order.deliveredAt}
+                                    </Message>
+                                ) : (
+                                    <Message error color="red">
+                                        Not Paid
+                                    </Message>
+                                )}
+                            </Card.Content>
                         </Card>
                         <Segment>
                             <Header>Ordered Items </Header>
                             <Item.Group divided>
-                                {renderCartItems(cartItems)}
+                                {renderCartItems(order.orderItems)}
                             </Item.Group>
                         </Segment>
                     </GridColumn>
@@ -140,7 +97,7 @@ const ConfirmOrder = () => {
                                     <List verticalAlign="middle">
                                         <List.Item>
                                             <List.Content floated="right">
-                                                ${cartItemsPrice}
+                                                ${order.itemsPrice}
                                             </List.Content>
                                             <List.Content>
                                                 Items :{" "}
@@ -148,7 +105,7 @@ const ConfirmOrder = () => {
                                         </List.Item>
                                         <List.Item>
                                             <List.Content floated="right">
-                                                $ {shippingCharge}
+                                                $ {order.shippingCharge}
                                             </List.Content>
                                             <List.Content>
                                                 Shipping :{" "}
@@ -156,7 +113,7 @@ const ConfirmOrder = () => {
                                         </List.Item>
                                         <List.Item>
                                             <List.Content floated="right">
-                                                ${taxPrice}
+                                                ${order.taxPrice}
                                             </List.Content>
                                             <List.Content>Tax : </List.Content>
                                         </List.Item>
@@ -167,22 +124,13 @@ const ConfirmOrder = () => {
                                 <Card.Header>
                                     <List.Item>
                                         <List.Content floated="right">
-                                            ${totalPrice}
+                                            ${order.totalPrice}
                                         </List.Content>
                                         <List.Content>
                                             Order total :{" "}
                                         </List.Content>
                                     </List.Item>
                                 </Card.Header>
-                                <Card.Description style={{ marginTop: "2vh" }}>
-                                    <Button
-                                        color="yellow"
-                                        fluid
-                                        onClick={onPlaceOrderHandler}
-                                    >
-                                        Place Order
-                                    </Button>
-                                </Card.Description>
                             </Card.Content>
                         </Card>
                     </GridColumn>
@@ -213,4 +161,4 @@ const renderCartItems = (items) =>
         );
     });
 
-export default ConfirmOrder;
+export default OrderDetails;

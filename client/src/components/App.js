@@ -9,12 +9,17 @@ import ViewCart from "./Cart/ViewCart";
 import Shipping from "./Cart/Shipping";
 import Billing from "./Cart/Billing";
 import ConfirmOrder from "./Cart/ConfirmOrder";
+import OrderDetails from "./Order/OrderDetail";
+import OrderList from "./Order/OrdersList";
+import ProfileEdit from "./ProfileEdit";
 
 const App = () => {
     return (
         <BrowserRouter>
             <ResponsiveContainer>
                 <Switch>
+                    <Route path="/orders" exact component={OrderList} />
+                    <Route path="/order/:id" exact component={OrderDetails} />
                     <Route
                         path="/product/:id"
                         exact
@@ -25,7 +30,8 @@ const App = () => {
                         exact
                         component={ConfirmOrder}
                     />
-                    <Route path="/billing" exact component={Billing} />
+                    <Route path="/profile" exact component={ProfileEdit} />
+                    <Route path="/billing/:id" exact component={Billing} />
                     <Route path="/shipping" exact component={Shipping} />
                     <Route path="/cart/:id?" exact component={ViewCart} />
                     <Route path="/login" exact component={LoginForm} />
