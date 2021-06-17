@@ -2,11 +2,15 @@
 
 # front-end
 
-1. Run Command "npm install" inside client folder to install all dependencies.
-2. then run npm start to start front-end-dev server.
+1. Run Command "npm install" inside client directory to install all dependencies.
+2. then run "npm start/yarn start" inside client directory to start front-end-dev server.
 
 # back-end
 
-1. start ur local mongodb server.
-2. then Run Command "npm install" inside server folder to install all dependencies.
-3. finally run npm start inside server to start backend-dev server.
+1. Run Command "npm install/yarn install" inside server directory to install all dependencies.
+2. finally run "npm start/yarn start" inside server directory to start backend-dev server.
+
+# mongo-Db
+
+1. install mongo-db locally
+2. Run Command "systemctl start mongod" to start mongodb server locally
