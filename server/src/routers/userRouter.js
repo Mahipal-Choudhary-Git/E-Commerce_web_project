@@ -1,11 +1,20 @@
 import { Router } from "express";
 import bcrypt from "bcryptjs";
 import expressAsyncHandler from "express-async-handler";
-
+import data from "../sampleData.js";
 import userModel from "../models/userModel.js";
 import { generateToken, isAuth } from "../utils.js";
 
 const userRouter = Router();
+
+userRouter.get(
+    "/users/seed",
+    expressAsyncHandler(async (req, res) => {
+        // await userModel.remove({});
+        const createdUsers = await userModel.insertMany(data.users);
+        res.send({ createdUsers });
+    })
+);
 
 userRouter.post(
     "/users",

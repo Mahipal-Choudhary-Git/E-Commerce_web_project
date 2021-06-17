@@ -34,9 +34,10 @@ const HomepageHeading = ({ mobile }) => (
                     fontSize: mobile ? "1.5em" : "1.7em",
                     fontWeight: "normal",
                     marginTop: mobile ? "0.5em" : "1.5em",
+                    marginBottom: mobile ? "0.5em" : "1.5em",
                 }}
             />
-            <Button
+            {/* <Button
                 style={{
                     marginTop: mobile ? "0.2em" : "0.5em",
 
@@ -47,7 +48,7 @@ const HomepageHeading = ({ mobile }) => (
             >
                 Get Started
                 <Icon name="right arrow" />
-            </Button>
+            </Button> */}
         </Container>
     </Segment>
 );
