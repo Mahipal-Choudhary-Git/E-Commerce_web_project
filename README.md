@@ -14,3 +14,8 @@
 
 1. install mongo-db locally
 2. Run Command "systemctl start mongod" to start mongodb server locally
+
+# sampledata inserting to db
+
+1. Do Once Only ("http://localhost:5000/api/products/seed") for sample products
+2. Do Once Only ("http://localhost:5000/api/users/seed") for sample users
